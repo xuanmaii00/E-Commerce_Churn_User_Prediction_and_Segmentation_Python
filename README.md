@@ -134,6 +134,7 @@ We apply **K-Means clustering** to partition churned users into 4 distinct clust
 
 ### Feature Importance for Clusters
 After clustering, we apply the **Random Forest model** to predict the cluster label using the churned user data. The model identifies the top 6 features that distinguish the clusters. These features provide deeper insights into the behavioral differences between the clusters. 
+
 **The detailed analysis and insights are performed in the code file uploaded.**
 
 
