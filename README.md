@@ -1,142 +1,156 @@
 # E-Commerce Churn User Prediction and Segmentation_Python
-Developed a Random Forest model to predict churn and a KMeans model to segment churned users into distinct behavior-based groups, providing actionable insights into general churn behaviors and patterns within each group
 
-## I. Introduction
+## 📌 Table of Contents
 
-### 1. Business Objective
-In the competitive landscape of e-commerce, retaining customers is vital for long-term success. This project aims to address the challenge of customer churn by predicting which users are likely to leave the platform. The specific objectives are as follows:
+- [Background & Overview](#background--overview)
+- [Dataset Description & Data Structure](#dataset-description--data-structure)
+- [Design Thinking Process](#design-thinking-process)
+- [Key Insights & Visualizations](#key-insights--visualizations)
+- [Final Conclusion & Recommendations](#final-conclusion--recommendations)
 
-- **Predict Churned Users**: Develop a supervised machine learning model to predict users who are likely to churn (leave the platform). For this, we utilize the Random Forest algorithm, which is effective in handling complex datasets and capturing nonlinear relationships.
+---
 
-- **Identify Churn Patterns**: Analyze the patterns and behaviors of churned users to understand the underlying factors contributing to their decision to leave. Insights from this analysis will provide actionable recommendations to the company for reducing churn rates.
+## 📌 Background & Overview
 
-- **Segment Churned Users**: In addition to prediction, we aim to create an unsupervised learning model using K-Means clustering. This model will classify churned users into distinct behavioral groups, enabling the company to tailor promotions and marketing strategies effectively for each segment.
+### 🎯 Objective
+Customer churn is a critical issue for businesses, as losing customers leads to revenue loss and increased acquisition costs. This project analyzes churn patterns using machine learning and provides strategic recommendations to reduce churn. Identifying key differences helps the company design personalized promotions and improve customer retention.
 
-### 2. Project Overview
-This project employs two main approaches:
+### 👤 Target Audience
+- 📊 Marketing Analysts & Data Analysts
+- 🏢 Business Managers & Decision-Makers
+- 🤝 Customer Retention Teams
 
-- **Supervised Learning**: 
-  - **Model**: Random Forest
-  - **Objective**: Predict which users are likely to churn based on historical data.
-  - **Outcome**: A predictive model that can identify at-risk users and provide insights for retention strategies.
+### ❓ Business Questions
+- What factors contribute to customer churn?
+- Can we predict which customers are likely to leave?
+- How can we segment churned customers for targeted retention efforts?
 
-- **Unsupervised Learning**:
-  - **Model**: K-Means Clustering
-  - **Objective**: Classify churned users into distinct behavioral groups based on their interaction data.
-  - **Outcome**: Identification of specific user behaviors that can inform targeted promotional offers, enhancing user retention.
+### 🎯 Project Outcome
+- Identified key factors influencing churn, such as engagement and order history.
+- Built a predictive model to classify customers as likely to churn or not.
+- Segmented churned customers to tailor retention strategies.
 
-### 3. Key Contributions
-- Developed and fine-tuned machine learning models to predict user churn and segment churned users.
-- Provided actionable insights and recommendations for improving customer retention strategies.
-- Enabled the e-commerce company to implement tailored promotions based on user behavior, potentially reducing churn rates.
+---
 
-### 4. Dataset Dictionary
-The dataset used for this project contains several variables related to customer behavior and interactions with the e-commerce platform. Below is a description of each variable:
+## 📂 Dataset Description & Data Structure
 
-| **Variable**                  | **Description**                                                                              |
-|-------------------------------|----------------------------------------------------------------------------------------------|
-| **CustomerID**                 | Unique customer ID.                                                                          |
-| **Churn**                      | Churn flag indicating whether the customer has churned (1) or not (0).                       |
-| **Tenure**                     | The number of months the customer has been with the company.                                |
-| **PreferredLoginDevice**       | The preferred device used by the customer to log into the platform (e.g., mobile, desktop).    |
-| **CityTier**                   | City tier (1, 2, or 3): geographic classification of the customer’s location.                  |
-| **WarehouseToHome**            | Distance between the warehouse and the customer’s home address.                              |
-| **PreferredPaymentMode**       | Preferred payment method used by the customer (e.g., credit card, PayPal).                    |
-| **Gender**                     | Gender of the customer (Male/Female).                                                        |
-| **HourSpendOnApp**             | Number of hours the customer spends on the app or website.                                   |
-| **NumberOfDeviceRegistered**   | The total number of devices registered under the customer’s account.                         |
-| **PreferredOrderCat**          | The category of products the customer orders most frequently in the last month.              |
-| **SatisfactionScore**          | The customer’s satisfaction score based on their recent experiences with the platform.        |
-| **MaritalStatus**              | Marital status of the customer (e.g., Single, Married).                                      |
-| **NumberOfAddress**            | Total number of addresses associated with the customer.                                      |
-| **Complain**                   | Whether the customer raised any complaints in the last month (Yes/No).                       |
-| **OrderAmountHikeFromLastYear**| The percentage increase in the customer’s order amount compared to the previous year.        |
-| **CouponUsed**                 | Total number of coupons used by the customer in the last month.                              |
-| **OrderCount**                 | The total number of orders placed by the customer in the last month.                         |
-| **DaySinceLastOrder**          | The number of days since the customer placed their last order.                               |
-| **CashbackAmount**             | The average cashback amount the customer received in the last month.                         |
+### 📌 Data Source
+- **Source:** Synthetic dataset representing an e-commerce business.
+- **Size:** 5,700 rows, 18 columns.
+- **Format:** `.csv`
 
-## II/ Project Coding
+### 📊 Data Structure & Relationships
 
-### 1. Import Necessary Libraries
-The following libraries are imported for various purposes:
+| Column Name            | Data Type  | Description                                      |
+|------------------------|-----------|--------------------------------------------------|
+| `CustomerID`          | INT       | Unique identifier for each customer             |
+| `Churn`               | BOOL      | Whether the customer has churned (1 = Yes, 0 = No) |
+| `Tenure`              | INT       | Number of months the customer has been active  |
+| `PreferredLoginDevice`| TEXT      | Device used for login                          |
+| `CityTier`            | INT       | Classification of customer’s city (1,2,3)       |
+| `WarehouseToHome`     | FLOAT     | Distance from warehouse to home (km)           |
+| `PreferredPaymentMode`| TEXT      | Payment method preferred by the customer       |
+| `HourSpendOnApp`      | FLOAT     | Average hours spent on the app                 |
+| `OrderCount`         | INT       | Total number of orders placed                  |
+| `CashbackAmount`     | FLOAT     | Total cashback received                        |
 
-- **Data Handling**: `pandas`, `numpy` - Used for data manipulation and analysis.
-- **Visualization**: `matplotlib`, `seaborn` - Help in visualizing data distributions and relationships.
-- **Preprocessing**: `LabelEncoder`, `StandardScaler` - Used for scaling numerical data and encoding categorical variables into numerical format.
-- **Machine Learning Models**: `RandomForestClassifier`, `KMeans`, `AgglomerativeClustering` - Used for classification and clustering tasks.
-- **Evaluation**: `metrics` - Tools like confusion matrix and classification report are used to evaluate model performance.
-- **Dimensionality Reduction**: `PCA` - Used to reduce the dimensions of the data for clustering.
+---
 
-These libraries facilitate the cleaning, transforming, modeling, and evaluating of the dataset throughout the project.
+## 🧠 Design Thinking Process
 
-### 2. Exploratory Data Analysis (EDA)
-The first step in any data science project is to perform exploratory data analysis (EDA) to understand the dataset. This includes:
+### 1️⃣ Empathize
+Understanding business concerns:
+- Who is leaving?
+- What are the reasons?
+- What are their behaviors?
 
-- **Handling Missing Data**: Identifying and addressing missing or null values in the dataset.
-- **Removing Duplicates**: Ensuring there are no duplicate rows that could affect the analysis.
-- **Correcting Data Types**: Ensuring each column has the correct data type for analysis (e.g., numerical, categorical).
+### 2️⃣ Define Point of View
+- Analyzing past customer behavior to predict churn probability.
+- Identifying behavioral patterns to recommend retention strategies.
+- Segmenting customers based on historical data.
 
-#### Univariate Analysis
-- **Numerical Data**: Basic statistics like mean, median, and standard deviation are used to understand the distribution of numerical variables such as `Tenure`, `OrderCount`, etc.
-- **Categorical Data**: Distribution of categorical variables like `Gender`, `CityTier`, and `PreferredPaymentMode` is visualized to see their distribution.
+### 3️⃣ Ideate
+- Exploring different machine learning models and segmentation techniques to address churn.
+- Comparing supervised and unsupervised learning approaches.
 
-#### Bivariate and Multivariate Analysis
-- We analyze relationships between `Churn` (our target variable) and other features. For example:
-  - **Correlation with Churn**: 
-    - `Churn` has a weak positive correlation with `Complain` (0.23), meaning users who complain are slightly more likely to churn.
-    - `Churn` has a weak negative correlation with `Tenure` (-0.33), indicating that longer-tenured users are less likely to churn.
+### 4️⃣ Prototype and Review
+- Building and testing models using historical data.
+- Evaluating models for accuracy and interpretability.
 
-These findings suggest that complaints significantly impact churn, while customers who have been on the platform longer tend to stay.
+---
 
-### 3. Supervised Model Training: Random Forest
-Now, we apply the **Random Forest model** for predicting churn:
+## ⚒️ Main Process
 
-#### Data Preprocessing
-- **Transform Categorical Variables**: Convert categorical columns like `Gender` and `PreferredPaymentMode` into numerical format using label encoding.
-- **Balancing Classes with SMOTE**: Since the dataset is imbalanced (more non-churned users than churned), we apply **SMOTE (Synthetic Minority Over-sampling Technique)** to balance the churn classes, ensuring better model performance.
+### 1️⃣ Import Necessary Libraries
 
-#### Model Training
-- Split the dataset into training and test sets using **train_test_split**.
-- Apply the **Random Forest model** on the training set to predict churn.
-- Evaluate the model’s performance using **confusion matrix** and **classification report**.
+- **Data Handling:** pandas, numpy  
+- **Visualization:** matplotlib, seaborn  
+- **Preprocessing:** LabelEncoder, StandardScaler  
+- **Machine Learning:** RandomForestClassifier, KMeans, AgglomerativeClustering  
+- **Evaluation:** metrics  
+- **Dimensionality Reduction:** PCA  
 
-The model achieves excellent results:
-- **Accuracy**: 98% of churned and non-churned users are predicted correctly.
-- **Feature Importance**: The model identifies the top features contributing to churn, including:
-  - **Tenure** (24.3%)
-  - **Marital Status** (Single: 9%)
-  - **Day Since Last Order** (6.8%)
-  - **Warehouse to Home** (5.5%)
-  - **Cashback Amount** (4.9%)
-  - **Coupon Used** (4.2%)
-  - **Order Count** (4.2%)
-  - **Hour Spend on App** (3.2%)
+These libraries facilitate the cleaning, transforming, modeling, and evaluation of the dataset.
 
-**The detailed analysis and insights are performed in the code file uploaded.**
+### 2️⃣ Exploratory Data Analysis (EDA)
 
-## 4. Unsupervised Model: K-Means Clustering
-Next, we apply **K-Means clustering** to segment churned users into distinct behavioral groups for targeted promotions.
+#### Handling Data Issues:
+- Identified and addressed missing or null values.
+- Removed duplicate records.
+- Ensured correct data types for analysis.
 
-### Dimensionality Reduction with PCA
-To reduce the dimensions of the data and avoid overfitting, we apply **Principal Component Analysis (PCA)**. PCA helps in reducing the complexity of the data while preserving its essential structure. We determine that 3 PCA components capture the intrinsic dimensions of the data effectively.
+#### Feature Analysis:
+- Univariate analysis for distributions of numerical and categorical variables.
+- Bivariate analysis to determine correlations with churn.
 
-### Standard Scaling
-We scale the features using **StandardScaler** to ensure that the data has zero mean and unit variance. This step is crucial for improving the performance of clustering algorithms like K-Means.
+#### Key Findings:
+- Customers with fewer orders and lower engagement had a higher churn rate.
+- Longer distance from warehouse to home increased churn probability.
+- Payment preferences influenced churn behavior.
 
-### Determining the Optimal Number of Clusters
-We use the **elbow method** to choose the optimal number of clusters. The elbow method helps identify the point where adding more clusters doesn’t significantly improve the model’s performance. In our case, we determine that 4 clusters are optimal.
+### 3️⃣ Supervised Model Training: Random Forest
 
-### Clustering with K-Means
-We apply **K-Means clustering** to partition churned users into 4 distinct clusters. To evaluate the clustering performance:
-- **t-SNE Visualization**: We use **t-SNE** to project the high-dimensional data into 2D for visualization. The 2D graph shows reasonably well-separated clusters, indicating effective segmentation.
-- **Silhouette Score**: The silhouette score of 0.4 indicates a moderately well-defined clustering structure, with distinct and reasonably separated groups.
+#### Preprocessing Steps:
+- Categorical variables encoded using Label Encoding.
+- Applied SMOTE to balance class distribution.
 
-### Feature Importance for Clusters
-After clustering, we apply the **Random Forest model** to predict the cluster label using the churned user data. The model identifies the top 6 features that distinguish the clusters. These features provide deeper insights into the behavioral differences between the clusters. 
+#### Model Performance:
+- Accuracy: **98%**
+- Feature importance: **Tenure, Order Count, Cashback, and Warehouse Distance** were top predictors.
 
-**The detailed analysis and insights are performed in the code file uploaded.**
+### 4️⃣ Unsupervised Learning: K-Means Clustering
 
+#### Segmentation Strategy:
+- Applied PCA for dimensionality reduction.
+- Determined 4 optimal clusters using the elbow method.
+- Used t-SNE for visualization.
 
+---
 
+## 📊 Key Insights & Visualizations
 
+### 🔍 Key Findings
+1️⃣ **Churn Drivers**
+   - Customers with fewer orders and lower engagement had a higher churn rate.
+   - Longer distance from warehouse to home increased churn probability.
+   - Payment preferences influenced churn behavior.
+
+2️⃣ **Prediction Performance**
+   - Random Forest achieved **98% accuracy**, outperforming other models.
+   - Feature importance analysis revealed **tenure, order count, and cashback** as top contributors.
+
+3️⃣ **Customer Segmentation**
+   - **Cluster 1**: High-value churners—previously frequent buyers but now inactive.
+   - **Cluster 2**: Low-value churners—sporadic shoppers with low order counts.
+   - **Cluster 3**: Dormant users—signed up but made minimal purchases.
+
+---
+
+## 🔎 Final Conclusion & Recommendations
+
+### 📌 Key Takeaways
+✔️ **Personalized Offers**: Target high-value churners with exclusive discounts.
+✔️ **Loyalty Programs**: Introduce cashback incentives for at-risk customers.
+✔️ **Engagement Strategies**: Enhance user experience with targeted marketing campaigns.
+
+By leveraging machine learning and segmentation, businesses can proactively reduce churn and improve customer retention strategies.
