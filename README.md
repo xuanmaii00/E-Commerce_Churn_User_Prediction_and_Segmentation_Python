@@ -139,10 +139,6 @@ These libraries facilitate the cleaning, transforming, modeling, and evaluation 
    - Random Forest achieved **98% accuracy**, outperforming other models.
    - Feature importance analysis revealed **tenure, order count, and cashback** as top contributors.
 
-3️⃣ **Customer Segmentation**
-   - **Cluster 1**: High-value churners—previously frequent buyers but now inactive.
-   - **Cluster 2**: Low-value churners—sporadic shoppers with low order counts.
-   - **Cluster 3**: Dormant users—signed up but made minimal purchases.
 
 ---
 
